@@ -3,97 +3,57 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>file selector demo</title>
+        <title>Demo Page</title>
 
         <link rel="stylesheet" href="bootstrap/4.1.3/bootstrap.min.css">
         <script src="bootstrap/4.1.3/jquery-3.3.1.min.js"></script>
         <script src="bootstrap/4.1.3/popper.min.js"></script>
         <script src="bootstrap/4.1.3/bootstrap.min.js"></script>
 
+        <style>
+         nav li {
+             margin-left:0.5rem;
+             margin-right:0.5rem;
+         }
+        </style>
+        
         <script>
-         var r = "/";
-         function get_file_list(d){
-             var cur_path_div = document.getElementById('cur_path_div');
-             var file_list_div = document.getElementById('file_list_div');
-             var dir = d;
-             if(r == "/"){
-                 if(d == ".."){ //goto root
-                     r = "/";
-                     dir = "/";
-                 }else if(d == "/"){
-                     r = "/";
-                 }else{
-                     r += d;
-                 }
-             }else{
-                 if(d == ".."){
-                     r = r.replace(/[^\/]*$/i, "");
-                     if(r != "/"){
-                         r = r.replace(/\/$/i, "");
-                     }
-                 }else{
-                     r += "/" + d;
-                 }
-             }
-             
-             $.get("file_selector.py?d=" + r, function(result){
-                 //update path
-                 cur_path_div.innerText = r;
-                 
-                 //update filelist
-                 html = "";
-                 result.dirinfo.forEach(function (item){
-                     if(item.type == "isdir"){
-                         html += "<a href=\"javascript:void(0)\" onclick=\"get_file_list('" + item.name + "')\">" + item.name + "/</a><br>";
-                     }else{
-                         html += item.name + "<br>";
-                     }
-                 });
-                 file_list_div.innerHTML = html;
+         function load_data(){
+
+             var str_div = document.getElementById('str_div');
+             $.get("load_str_data.py", function(result){
+                 load_data.innerText = result;
              });
+
+             var list_div = document.getElementById('list_div');
+             $.get("load_list_data.py", function(result){
+                 var html = "";
+                 result.forEach(function(item){
+                     html += "<div>[" + item.id + "]" + item.name + "</div>";
+                 });
+                 list_div.innerHTML = html;
+             });
+             
+         }
+         
+         window.onload = function(){
+             load_data();
          }
         </script>
         
     </head>
     
-    <body>
-        <div class="container">
-            <div class="text-center">file selector demo</div>
+    <body style="background-color:#e0e0e0;">
+        <div class="container" style="background-color:#ffffff;">
+            <!-- header -->
+            <div class="text-center">Demo Page</div>
+
+            <!-- main -->
             <div>
-                <label>file selected:</label>
-                <input type="text" class="form-control" id="filepath">
-                
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Select file
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Select file</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div id="cur_path_div" style="margin:0.2rem;font-size:1.2rem;font-weight:bold;">
-                                /
-                            </div>
-                            <div class="modal-body" id="file_list_div" style="max-height:400px;overflow:auto;">
-                                <a href="javascript:void(0)" onclick="get_file_list('/')">/</a><br>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">OK</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                
-                
+                <div id="str_div" class="text-center" style="font-size:1.2rem;padding:0.2rem;">load string from backend</div>
+                <div id="list_div">load json list from backend</div>
             </div>
+            
         </div>
     </body>
 </html>
