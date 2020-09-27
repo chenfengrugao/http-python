@@ -5,7 +5,7 @@
 
 This is a simple http server without framework.
 
-- support static resouces, such html, css, js, ico, jpg, png, etc.
+- support static resouces, such as html, css, js, ico, jpg, png, etc.
 - support python backend program language
 - support GET
 - support json
