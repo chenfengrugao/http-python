@@ -14,8 +14,8 @@ class myHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         #GET /index.html?a=b&c=d HTTP/1.1
         #GET /favicon.ico HTTP/1.1
 
-        print(requestline)
-        get_string = requestline.split(' ')[1]
+        #print(requestline)
+        get_string = self.path
         
         #urldecode
         get_string = urllib.parse.unquote(get_string)
@@ -40,9 +40,10 @@ class myHTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def post_param_handle(self, requestline):
         #POST /backend/get_member_count.py HTTP/1.1
+
         #print(requestline)
         
-        page = requestline.split(' ')[1]
+        page = self.path
         self.post_data = {}
         self.post_data['page'] = page
         
@@ -52,23 +53,26 @@ class myHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         #parse post data
         #print(self.headers)
         #print(self.command)
-        
+        #print('/' * 40)
+        #print(self.headers)
+        #print('+' * 40)
+
         req_data = self.rfile.read(int(self.headers['content-length']))
         param = req_data.decode()
         
         if len(param) != 0:
             self.post_data['param'] = param
-            get_param = {}
-            get_param_list = self.post_data['param'].split('&')
-            for param in get_param_list:
+            post_param = {}
+            post_param_list = self.post_data['param'].split('&')
+            for param in post_param_list:
                 if re.search(r'=', param):
                     param_item_list = param.split('=')
                     k = param_item_list[0]
-                    get_param[k] = param_item_list[1]
-            self.post_data['param_dict'] = get_param
+                    post_param[k] = param_item_list[1]
+            self.post_data['param_dict'] = post_param
         else:
             self.post_data['param_dict'] = {}
-
+            
             
     def include_html_handle(self, m):
         insert_file_name = m.group(1)
