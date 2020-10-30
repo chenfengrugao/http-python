@@ -102,12 +102,22 @@ class myHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         #
         #static file
         #
-        if re.search(r'\.(php|txt)$', self.get_data['page']):
+        if re.search(r'\.php$', self.get_data['page']):
             #404
             self.send_response(404)
-            #self.send_header('Content-type', 'text/html');
-            #self.end_headers()
-            #self.wfile.write("Unknow File Type".encode('utf-8'))
+            self.send_header('Content-type', 'text/html');
+            self.end_headers()
+            self.wfile.write("File Not Found".encode('utf-8'))
+            
+        elif re.search(r'robots\.txt$', self.get_data['page']):
+            #robots
+            f = open('.' + self.get_data['page'], 'rb')
+            s1 = f.read()
+
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain');
+            self.end_headers()
+            self.wfile.write(s1)
             
         elif re.search(r'\.(html|css|js|ico|jpg|jpeg|png)$', self.get_data['page']):
             filetype = self.get_data['page'].split('.')[-1]
