@@ -3,11 +3,11 @@
 
 ## description
 
-This is a simple http server without framework.
+This is a simple http server based on http.server.
 
 - support static resouces, such as html, css, js, ico, jpg, png, etc.
 - support python backend program language
-- support GET
+- support GET/POST
 - support json
 
 ## start http server
@@ -22,4 +22,4 @@ In this demo page, we use jquery `$.get()` to load string from python and json d
 
 ## Note
 
-Only test on RHEL6.8.
+Only test on RHEL6.8, Centos8.2
